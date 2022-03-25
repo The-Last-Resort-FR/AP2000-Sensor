@@ -5,9 +5,9 @@
  *
  * This is a library for Aquaread's AP-2000 sensor.
  *
- *  @section author Author
+ * @section author Author
  *
- *  Written by The Last Resort.
+ * Written by The Last Resort.
  */
 
 

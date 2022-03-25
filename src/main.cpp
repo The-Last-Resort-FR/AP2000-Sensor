@@ -5,9 +5,9 @@
  *
  * This is a program to read and send to TTN AP-2000 sensor's measurements via LoRaWAN.
  *
- *  @section author Author
+ * @section author Author
  *
- *  Written by The Last Resort.
+ * Written by The Last Resort.
  */
 
 
