@@ -6,7 +6,7 @@
 constexpr uint16_t PORT_SERIE = 115200;
 constexpr uint8_t DATA_PIN = 12;
 constexpr uint8_t WAKE_UP_PIN = 6;
-;
+
 LoRaModem modem;
 Ap2000Sensor sensor(DATA_PIN, 0);
 const String appEui = "0000000000000000";
