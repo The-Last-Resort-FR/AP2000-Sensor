@@ -19,3 +19,4 @@
 - Make sure the used LoRa board/module you use is compatible with the MKR WAN Arduino's library
 - This repository will probably never be updated, use with caution
 - Fill appEui and appKey (in main.cpp) with your own you get on TTN after creating an app
+- To see the debug prints on the serial define _DEBUG
