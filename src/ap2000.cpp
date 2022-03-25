@@ -126,7 +126,7 @@ void Ap2000Sensor::DispSensorInfos(Serial_& serial) {
  *  @brief  Ping as SDI-12 address
  *  @param  addr
  *          Address of the sensor to ping
- *	@return Return true if the sensor replied to the ping otherwise return false
+ *  @return Return true if the sensor replied to the ping otherwise return false
  */
 bool Ap2000Sensor::IsSensorActive(uint8_t addr)
 {
