@@ -1,4 +1,17 @@
-#include "ap200.hpp"
+/*!
+ * @file ap2000.cpp
+ *
+ * @section intro_sec Introduction
+ *
+ * This is a library for Aquaread's AP-2000 sensor.
+ *
+ *  @section author Author
+ *
+ *  Written by The Last Resort.
+ */
+
+
+#include "ap2000.hpp"
 
 
 /*!

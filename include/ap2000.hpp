@@ -1,5 +1,18 @@
 #pragma once
 
+/*!
+ * @file ap2000.hpp
+ *
+ * @section intro_sec Introduction
+ *
+ * This is a library for Aquaread's AP-2000 sensor.
+ *
+ *  @section author Author
+ *
+ *  Written by The Last Resort.
+ */
+
+
 #include <SDI12.h>
 
 struct SensorInfos
