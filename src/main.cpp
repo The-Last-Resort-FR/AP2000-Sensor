@@ -12,32 +12,58 @@
 
 
 #include <Arduino.h>
+
+#include "LowPower.h"
+#include "RTCZero.h"
 #include <SDI12.h>
 #include <MKRWAN.h>
 #include "ap2000.hpp"
 
+#define RESET() digitalWrite(RESET_PIN, LOW)
+
 constexpr uint16_t PORT_SERIE = 115200;
 constexpr uint8_t DATA_PIN = 12;
 constexpr uint8_t WAKE_UP_PIN = 6;
+constexpr uint8_t RESET_PIN = 12;
+
 
 LoRaModem modem;
 Ap2000Sensor sensor(DATA_PIN, 0);
 const String appEui = "";
 const String appKey = "";
 
+RTCZero rtc;
+
+void alarm() 
+{
+  return;
+}
+
 void setup()
 {
-
   Serial.begin(PORT_SERIE);
+
+  // digitalWrite(10, HIGH);    // Power consumption test
+  // pinMode(10, OUTPUT);
+
+  digitalWrite(RESET_PIN, HIGH);
+  pinMode(RESET_PIN, OUTPUT);
+
+  rtc.begin();
   sensor.SensorBegin();
-  delay(5000);
 
   if (!modem.begin(EU868)) // Setup LoRa
   { 
-    Serial.println("Failed to start module");
-    while (1)
-    {
-    }
+    #ifdef _DEBUG
+      Serial.println("Failed to start module");
+    #endif
+    rtc.setDate(0,0,0);
+    rtc.setTime(0,0,0);
+    rtc.setAlarmTime(0,2,0);
+    rtc.enableAlarm(rtc.MATCH_HHMMSS);
+    rtc.attachInterrupt(alarm);
+    LowPower.standby();
+    RESET();
   }
 
   Serial.println(modem.version());
@@ -46,20 +72,26 @@ void setup()
 
   if (!connected)
   {
-    Serial.println("A problem has occured while joining the TTN app");
-    while (1)
-    {
-    }
+    #ifdef _DEBUG
+      Serial.println("A problem has occured while joining the TTN app");
+    #endif
+    rtc.setDate(0,0,0);
+    rtc.setTime(0,0,0);
+    rtc.setAlarmTime(0,2,0);
+    rtc.enableAlarm(rtc.MATCH_HHMMSS);
+    rtc.attachInterrupt(alarm);
+    LowPower.standby();
+    RESET();
   }
-
+  
   pinMode(WAKE_UP_PIN, OUTPUT);
 }
 
 void loop()
 {
-
   digitalWrite(WAKE_UP_PIN, HIGH); // Wake up the black box
-  delay(400000);                   // Data won't be ready and stable until 40s
+  
+  //delay(40000);                   // Data won't be ready and stable until 40s
 
   #ifdef _DEBUG
     sensor.DispSensorInfos(Serial); // Debug test
@@ -104,9 +136,9 @@ void loop()
   payload[8] = highByte(tPh);
   payload[9] = lowByte(tPh);
 
-  modem.beginPacket(); // Sending data via LoRa
-  modem.write(payload, sizeof(payload));
-  int err = modem.endPacket(true);
+  // modem.beginPacket(); // Sending data via LoRa
+  // modem.write(payload, sizeof(payload));
+  // int err = modem.endPacket(true);
   #ifdef _DEBUG
     if (err > 0)
     {
@@ -120,6 +152,22 @@ void loop()
   #endif
 
   digitalWrite(WAKE_UP_PIN, LOW); // Put the blackbox back to sleep
+  // Serial.println("Going to sleep");      // Power consumtion test
+  // digitalWrite(10, HIGH);
+  // delay(10000);
+  // digitalWrite(10, LOW);
 
-  delay(30 * 60 * 1000); // Wait half an hour
+  // rtc.setDate(0,0,0);
+  // rtc.setTime(0,0,0);
+  // rtc.setAlarmTime(0,0,20);
+  // rtc.enableAlarm(rtc.MATCH_HHMMSS);
+  // rtc.attachInterrupt(alarm);
+  // LowPower.standby();
+  // delay(10);
+
+  // Serial.println("woke up");
+  // digitalWrite(10, HIGH);
+  // delay(3000);
+  // digitalWrite(10, LOW);
+  // delay(3000);
 }
