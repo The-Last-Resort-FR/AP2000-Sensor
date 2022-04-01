@@ -21,7 +21,7 @@
 
 #define RESET() digitalWrite(RESET_PIN, LOW)
 
-constexpr uint16_t PORT_SERIE = 115200;
+constexpr uint32_t PORT_SERIE = 115200;
 constexpr uint8_t DATA_PIN = 12;
 constexpr uint8_t WAKE_UP_PIN = 6;
 constexpr uint8_t RESET_PIN = 12;
@@ -91,7 +91,7 @@ void loop()
 {
   digitalWrite(WAKE_UP_PIN, HIGH); // Wake up the black box
   
-  //delay(40000);                   // Data won't be ready and stable until 40s
+  delay(40000);                   // Data won't be ready and stable until 40s
 
   #ifdef _DEBUG
     sensor.DispSensorInfos(Serial); // Debug test
@@ -136,9 +136,9 @@ void loop()
   payload[8] = highByte(tPh);
   payload[9] = lowByte(tPh);
 
-  // modem.beginPacket(); // Sending data via LoRa
-  // modem.write(payload, sizeof(payload));
-  // int err = modem.endPacket(true);
+  modem.beginPacket(); // Sending data via LoRa
+  modem.write(payload, sizeof(payload));
+  int err = modem.endPacket(true);
   #ifdef _DEBUG
     if (err > 0)
     {
